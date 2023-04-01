@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>陀螺仪Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        function begintly(){// ios 提示授权， 返回的是一个 promise
+            window.DeviceOrientationEvent.requestPermission()
+             .then(state => {
+                if(state === "granted"){//允许
+                    alert("允许使用陀螺仪：",state)
+                }else if(state === "denied"){//拒绝
+                    alert("拒绝使用陀螺仪：",state)
+                }else if(state === "prompt"){
+                    alert("用户进行其他操作：",state)
+                }
+            });
+        }
+    </script>
+    <h1>陀螺仪Demo</h1>
+    <p>使用手机陀螺仪实现画布旋转</p>
+    <input type="button" onclick="begintly()" value="启用陀螺仪" />
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <script type="text/javascript">
+        console.error("befor haha");
+        //alert("haha1");
+        console.log("begin--->");
+        // 获取画布和上下文
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        // 初始化角度
+        var angle = 0;
+        // 监听陀螺仪事件
+        window.addEventListener("deviceorientation", function(event) {
+            console.log("deviceorientation--->");
+            // 获取陀螺仪的角度
+            var alpha = event.alpha;
+            var beta = event.beta;
+            var gamma = event.gamma;
+            // 更新角度
+            angle = gamma;
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 保存画布状态
+            ctx.save();
+            // 移动画布原点到画布中心
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            // 旋转画布
+            ctx.rotate(angle * Math.PI / 180);
+            // 绘制矩形
+            ctx.fillStyle = "red";
+            ctx.fillRect(-50, -50, 100, 100);
+            // 恢复画布状态
+            ctx.restore();
+        });
+    </script>
+</body>
+</html>
