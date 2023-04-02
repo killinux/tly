@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 Gyroscope Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        #container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+        #airplane {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background-image: url('https://www.hackernel.com/tly/1.png');
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="airplane"></div>
+</div>
+<input type="button" onclick="begintly()" value="请求陀螺仪权限" />
+<script type="text/javascript">
+function begintly(){
+    // ios 提示授权， 返回的是一个 promise
+    window.DeviceOrientationEvent.requestPermission()
+     .then(state => {
+        if(state === "granted"){//允许
+            alert("允许使用陀螺仪：",state)
+        }else if(state === "denied"){//拒绝
+            alert("拒绝使用陀螺仪：",state)
+        }else if(state === "prompt"){
+            alert("用户进行其他操作：",state)
+        }
+    });
+}
+</script>
+<script>
+    window.addEventListener('deviceorientation', function (event) {
+        var x = event.beta; // range: -180 to 180
+        var y = event.gamma; // range: -90 to 90
+
+        // Adjust airplane's position based on x and y values
+        document.getElementById('airplane').style.transform = 'translate3d(' + (y * 2) + 'px,' + (x * 2) + 'px,0)';
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instant Messaging</title>
+    <meta charset="UTF-8">
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .chat-window {
+            height: 500px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+        }
+        .chat-message .username {
+            font-weight: bold;
+        }
+        .chat-message .time {
+            color: #888;
+            font-size: 12px;
+        }
+        .chat-message .content {
+            margin-top: 5px;
+        }
+        .message-input {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .message-input input[type="text"] {
+            flex: 1;
+            height: 40px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .message-input input[type="submit"] {
+            height: 40px;
+            padding: 0 20px;
+            background-color: #0084ff;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-window">
+            <div class="chat-message">
+                <span class="username">John:</span>
+                <span class="time">12:30pm</span>
+                <div class="content">Hi, how are you?</div>
+            </div>
+            <div class="chat-message">
+                <span class="username">Mary:</span>
+                <span class="time">12:32pm</span>
+                <div class="content">I'm good, thanks. How about you?</div>
+            </div>
+            <div class="chat-message">
+                <span class="username">John:</span>
+                <span class="time">12:34pm</span>
+                <div class="content">I'm doing well too, thanks.</div>
+            </div>
+        </div>
+        <form id="message-form">
+            <div class="message-input">
+                <input type="text" id="message" name="message" placeholder="Type your message here...">
+                <input type="submit" value="Send">
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        var form = document.getElementById("message-form");
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            var messageInput = document.getElementById("message");
+            var message = messageInput.value.trim();
+            if (message !== "") {
+                var chatWindow = document.querySelector(".chat-window");
+                var chatMessage = document.createElement("div");
+                chatMessage.className = "chat-message";
+                var username = document.createElement("span");
+                username.className = "username";
+                username.textContent = "You:";
+                var time = document.createElement("span");
+                time.className = "time";
+                time.textContent = getTime();
+                var content = document.createElement("div");
+                content.className = "content";
+                content.textContent = message;
+                chatMessage.appendChild(username);
+                chatMessage.appendChild(time);
+                chatMessage.appendChild(content);
+                chatWindow.appendChild(chatMessage);
+                messageInput.value = "";
+            }
+        });
+
+        function getTime() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            return strTime;
+        }
+    </script>
+</body>
+</html>
